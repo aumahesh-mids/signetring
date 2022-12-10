@@ -1,0 +1,147 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage{authblk}
+\usepackage[hyperref]{acl2020}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{microtype}
+\usepackage{lipsum}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
+%\usepackage{float}
+%\usepackage{stfloats}
+\usepackage{dblfloatfix}
+%\usepackage{multicol}
+\usepackage{cprotect}
+\usepackage{xspace}
+% https://robjhyndman.com/hyndsight/latex-floats/
+\usepackage[section]{placeins}
+\usepackage{csquotes}
+\usepackage{fnpct}
+\renewcommand{\UrlFont}{\ttfamily\small}
+
+%\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\aclfinalcopy 
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    literate=
+      {isPrime}{\bfseries isPrime}{7}
+      {unique}{\bfseries unique}{6}
+      {swap}{\bfseries swap}{4}
+      {xyz}{\bfseries xyz}{3}
+      {blah}{\bfseries blah}{4}
+      {reorder}{\bfseries reorder}{6}
+}
+
+\lstset{style=mystyle}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{fpu}
+\usepackage{footmisc}
+\usepackage{graphicx}
+\usepackage{arydshln}
+
+\pgfset{fpu}
+\pgfset{fpu/output format=fixed}
+\pgfmathsetmacro{\lr}{5e-5}
+
+\setlength{\dashlinedash}{0.2pt}
+\setlength{\dashlinegap}{1.5pt}
+\setlength{\arrayrulewidth}{0.3pt}
+
+\newcommand\BibTeX{B\textsc{ib}\TeX}
+
+% https://aty.sdsu.edu/bibliog/latex/floats.html
+
+% Alter some LaTeX defaults for better treatment of figures:
+    % See p.105 of "TeX Unbound" for suggested values.
+    % See pp. 199-200 of Lamport's "LaTeX" book for details.
+    %   General parameters, for ALL pages:
+    \renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+    \renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+    %   Parameters for TEXT pages (not float pages):
+    \setcounter{topnumber}{2}
+    \setcounter{bottomnumber}{2}
+    \setcounter{totalnumber}{4}     % 2 may work better
+    \setcounter{dbltopnumber}{2}    % for 2-column pages
+    \renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
+    \renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+    %   Parameters for FLOAT pages (not text pages):
+    \renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
+	% N.B.: floatpagefraction MUST be less than topfraction !!
+    \renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
+
+	% remember to use [htp] or [htpb] for placement
+
+
+\newcommand{\name}{Signet-ring\xspace}
+\newcommand{\ta}{TA\xspace}
+\newcommand{\TA}{Trusted Authority\xspace}
+\newcommand{\AuthApp}{Authenticated App\xspace}
+\newcommand{\authapp}{authenticated app\xspace}
+\newcommand{\App}{App\xspace}
+\newcommand{\app}{app\xspace}
+\newcommand{\Owner}{Owner\xspace}
+\newcommand{\Publisher}{Publisher\xspace}
+\newcommand{\Reader}{Reader\xspace}
+\newcommand{\owner}{owner\xspace}
+\newcommand{\publisher}{publisher\xspace}
+\newcommand{\reader}{reader\xspace}
+
+% \title{\name: Authenticity and Confidentiality in Sharing Digital Objects\\
+% \large Identify Plagiarism in Digital Photography}
+\title{\name: Authentic and Confidential Sharing of Digital Objects}
+\author{Amangeet Samra}
+\author{Amrita Mande}
+\author{Catherine Jimerson}
+\author{Diamond Rorie}
+\author{Mahesh Arumugam}
+\affil[]{W233 Project Group \#2}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    In the context of recent fake news proliferation, in this paper, we investigate the authenticity and confidentiality aspects of sharing digital objects, especially digital photographs, in news publications. More specifically, we investigate the problem of ensuring the authenticity of a published photograph while remaining anonymous to the news publisher and the reader. We propose a system that provides: (1) robust confidentiality to a source of a digital object while allowing a publisher to authenticate the object through a trusted authority for authenticity (i.e., original and not fabricated beyond acceptable edits), (2) verify that the source is the owner of the object, (3) construct and maintain a {\em lineage} of the edits and measure the difference between the objects, and (4) allow a reader to verify that the published image is authentic and the lineage is protected. 
+\end{abstract}
+
+\input{intro}
+\input{background}
+\input{methods}
+\input{results}
+\input{discussion}
+\input{conclusion}
+
+{\small
+\bibliography{main}
+\bibliographystyle{unsrt}
+}
+
+\input{contribution}
+
+\end{document}

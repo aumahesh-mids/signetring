@@ -1,0 +1,39 @@
+\section{Results}
+\label{sec:results}
+
+In this section, we discuss a proof-of-concept implementation of \name and our findings. 
+
+\subsection{Implementation}
+\label{sec:impl}
+
+We implemented a proof-of-concept (POC) system of \name.\footnote{The implementation of this architecture is available at \url{https://github.com/aumahesh-mids/signetring}.} We modeled the various components and actors of \name using Python FastAPI \cite{fastapi} web services that expose HTTP REST \cite{rest} endpoints and use a PostgreSQL as the backend database. 
+
+\subsubsection{\TA Application\footnote{OpenAPI specification for \ta is available at: \url{https://app.swaggerhub.com/apis/AUMAHESHMIDS/signet-ta/0.1.0}}}
+We implemented \ta as a Python FastAPI web server that exposes the following REST APIs. 
+
+\begin{itemize}
+    \item {\em apps}: Register a new app and get a list of registered apps. 
+    \item {\em user}: Register a new user and get a list of registered users. 
+    \item {\em objects}: Request a certificate for a new object, find the lineage of an object, and publish a certified digital object. 
+    \item {\em publication}: Implement the challenge protocol discussed in Section \ref{sec:pub-object}.
+    \item {\em verification}: Verify the certificate of a published object. 
+\end{itemize}
+
+Note that we have implemented additional APIs that are not listed above (for brevity).
+
+\subsubsection{User\footnote{OpenAPI specification for user application is available at: \url{https://app.swaggerhub.com/apis/AUMAHESHMIDS/user/0.1.0}}}
+The user application exposes endpoints to initialize an \owner or a \publisher and register with the \ta. For an \owner, the user application exposes REST endpoints that: (1) create a new digital object (by forwarding the request to the source app) and (2) initiate the challenge protocol for publication of the object. For a \publisher, it exposes a REST endpoint to trigger a challenge for the publication of an object. 
+
+\subsubsection{Source \App\footnote{OpenAPI specification for source \app application is available at: \url{https://app.swaggerhub.com/apis/AUMAHESHMIDS/app/0.1.0}}}
+We implemented the source app as a server that exposes a REST endpoint to initialize the app (type of the application) and register it with the \ta. When the \owner submits a request to create a new object, the user app invokes a REST API on the source app that triggers the creation and submission of the object to the \ta. 
+
+\subsection{Findings}
+\label{sec:findings}
+
+We measured success based on the following criteria: (1) verification of published objects, (2) maintenance of accurate lineages for each digital object, and (3) robustness against imitation attacks.
+
+We know that some users will try to subvert the system, for example, by taking pictures of pictures or trying to represent other users. The challenge protocol protects against the imitation of users and publishers. 
+
+\name certifies the authenticity of digital objects upon creation (e.g., clicking a photograph). Those certifications are viewable by the \publisher, the \owner, and any \reader. \name also tracks all edits made by both the \owner and any other users in our system, which is essential in providing another layer of authenticity as a \reader can track the edited object back to the original. Note that a \reader cannot track the published object back to its \owner. 
+
+A challenge protocol that allows mutual verification of owners and publishers was added to the scope of the work to deal with imitation attacks. We believe our design and the POC implementation met the goals. We discuss several improvements and enhancements to our design (and our implementation) in the next section.

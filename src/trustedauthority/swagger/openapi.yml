@@ -1,0 +1,361 @@
+openapi: 3.0.3
+info:
+  title: Sharing Digital Objects - OpenAPI
+  description: ''
+  contact:
+    email: aumahesh@berkeley.edu
+  version: '0.1'
+paths:
+  /trustedauthority:
+    summary: APIs for Trusted Authority
+    get:
+      summary: Get metadata about the trusted authority
+      description: Get Information about a trusted authority
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                example:
+                  value: |-
+                    {
+                     "name": "DigitalAuthority",
+                      "description": "Provides a way to authenticate digital objects without revealing the identity of the owner"
+                    }
+  /trustedauthority/apps:
+    summary: >-
+      Provides information about various apps registered with the trusted
+      authority. 
+    post:
+      summary: Add a new source application
+      description: ''
+      operationId: ''
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewApp'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+    get:
+      summary: Get all source applications
+      parameters:
+        - in: query
+          name: kind
+          schema:
+            type: string
+            enum: ["word-processor", "camera", "photo-editor", "video-capture", "video-editor"]
+          required: false
+      responses:
+        '200':
+          description: Response for listing all source applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+  /trustedauthority/apps/{id}:
+    get:
+      summary: Get a specific source application
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the registered application
+      responses:
+        '200':
+          description: Response for getting one source application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'  
+  /trustedauthority/users:
+    summary: >-
+      Provides information about users registered with the trusted
+        authority. 
+    post:
+      summary: Add a new user
+      description: ''
+      operationId: ''
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    get:
+      summary: Get all users
+      parameters:
+        - in: query
+          name: kind
+          schema:
+            type: string
+            enum: ["Creator", "Publisher"]
+          required: false
+      responses:
+        '200':
+          description: Response with all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'   
+  /trustedauthority/users/{id}:
+    get:
+      summary: Get a specific user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user
+      responses:
+        '200':
+          description: Response for getting one user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /trustedauthority/objects:
+    summary: >-
+      Provides information about objects authenticated by the trusted authority
+    post:
+      summary: Authenticate a new object
+      description: ''
+      operationId: ''
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDigitalObject'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalObject'
+    get:
+      summary: Get all registered objects
+      parameters:
+        - in: query
+          name: kind
+          schema:
+            type: string
+            enum: ["document", "photo", "video"]
+          required: false
+      responses:
+        '200':
+          description: Response with all objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DigitalObject'   
+  /trustedauthority/verify:
+    post:
+      summary: Verify a specific object
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        '200':
+          description: successful verification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'  
+        '404':
+          description: verification failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'  
+components:
+  schemas:
+    NewApp:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the app
+        kind:
+          type: string
+          enum: ["word-processor", "camera", "photo-editor", "video-capture", "video-editor"]
+          description: Type of the app
+        cert:
+          type: string
+          description: Public key for the app
+    App:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Name of the app
+        kind:
+          type: string
+          enum: ["word-processor", "camera", "photo-editor", "video-capture", "video-editor"]
+          description: Type of the app
+        created-at:
+          type: integer
+          description: Timestamp of when the app was first registered with the trusted authority
+        updated-at:
+          type: integer
+          description: Timestamp of when the app was last modififed
+        last-object-registered-at:
+          type: integer
+          description: Timestamp of when the last object was registered with the trusted authority
+        num-created:
+          type: integer
+          description: Number of objects created by the app
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the user
+        kind:
+          type: string
+          enum: ["Creator", "Publisher"]
+          description: Type of the user. Creator is the owner of an object or editor of an object. Publisher is the user that publishes the object for consumption. 
+        cert:
+          type: string
+          description: Public key for the user
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Name of the user
+        kind:
+          type: string
+          enum: ["Creator", "Publisher"]
+          description: Type of the user. Creator is the owner of an object or editor of an object. Publisher is the user that publishes the object for consumption. 
+        cert:
+          type: string
+          description: Public key for the user
+        created-at:
+          type: integer
+          description: Timestamp of when the user was registered with the trusted authority
+        updated-at:
+          type: integer
+          description: Timestamp of when the user was last modififed
+        last-object-registered-at:
+          type: integer
+          description: Timestamp of when the last object was registered with the trusted authority
+        num-created:
+          type: integer
+          description: Number of objects created by the Creator
+        num-edited:
+          type: integer
+          description: Number of objects edited by the Creator
+        num-published:
+          type: integer
+          description: Number of objects published by the Publisher
+    NewDigitalObject:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the object
+        kind:
+          type: string
+          enum: ["document", "photo", "video"]
+          description: Type of the object.  
+        anonymous:
+          type: boolean
+          description: Is the creator desire to be anonymous
+        payload:
+          type: string
+          description: Encrypted object, encrypted with the key of app and the key of the user (if not anonymous)
+        parent-id:
+          type: string
+          description: If the object is edited, ID of the parent object
+    DigitalObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Name of the object
+        kind:
+          type: string
+          enum: ["document", "photo", "video"]
+          description: Type of the object.  
+        parent-id:
+          type: string
+          description: If the object is edited, ID of the parent object
+        object-cert:
+          type: string
+          description: Public cert for the object
+        created-at:
+          type: integer
+          description: Timestamp of when the object was registered with the trusted authority
+        updated-at:
+          type: integer
+          description: Timestamp of when the object was last modififed
+        num-verifications:
+          type: integer
+          description: Number of verification requests for the object
+    VerificationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the object
+        kind:
+          type: string
+          enum: ["document", "photo", "video"]
+          description: Type of the object.  
+        object-cert:
+          type: string
+          description: Public cert for the object
+    VerificationResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the object
+        kind:
+          type: string
+          enum: ["document", "photo", "video"]
+          description: Type of the object.  
+        valid:
+          type: boolean
+          description: Is the object authentic?
+        created-at:
+          type: integer
+          description: Timestamp of when the object was registered with the trusted authority
+        updated-at:
+          type: integer
+          description: Timestamp of when the object was last modififed        
